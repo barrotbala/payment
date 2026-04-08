@@ -81,14 +81,17 @@ const Landing = () => {
   const [openFaq, setOpenFaq] = useState(0);
 
   return (
-    <div className="flex flex-col gap-24">
+    <div className="flex flex-col bg-white">
       {/* 1. HERO SECTION */}
       <section 
-        className="relative w-[100vw] left-[50%] right-[50%] -ml-[50vw] -mr-[50vw] -mt-24 pt-40 pb-24 flex flex-col items-center bg-cover bg-center"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=2000&q=80')" }}
+        className="relative w-[100vw] left-[50%] right-[50%] -ml-[50vw] -mr-[50vw] -mt-24 pt-44 pb-44 flex flex-col items-center bg-cover bg-bottom"
+        style={{ backgroundImage: "url('/saas_hero_bg.png')" }}
       >
-        <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px]"></div>
-        <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-background to-transparent"></div>
+        {/* Superior Frost overlay to soften the image details */}
+        <div className="absolute inset-0 bg-white/50 backdrop-blur-[4px] -z-10"></div>
+        
+        {/* Extreme smooth transition out to connect to pricing perfectly */}
+        <div className="absolute bottom-[-2px] inset-x-0 h-64 bg-gradient-to-t from-white via-white/90 to-transparent -z-10"></div>
 
         <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center">
           <h1 className="text-[42px] md:text-[64px] font-[800] tracking-tight leading-[1.1] max-w-4xl mx-auto text-center text-text-main">
@@ -98,26 +101,38 @@ const Landing = () => {
             </span>
           </h1>
           
-          <div className="flex flex-wrap justify-center gap-6 md:gap-8 mt-10 w-full max-w-4xl mx-auto px-4">
+          <div className="flex flex-wrap justify-center gap-8 md:gap-10 mt-12 w-full max-w-4xl mx-auto px-4">
             {["Comprehensive Curriculum", "Flexible contracts", "Guaranteed Placement", "Reliable support"].map(item => (
-              <div key={item} className="flex items-center justify-center gap-2 text-[14px] md:text-[15px] font-medium text-[#374151]">
-                <CheckCircle size={18} className="text-[#2563EB] shrink-0" />
-                <span className="text-center">{item}</span>
+              <div key={item} className="flex items-center justify-center gap-2 text-[14.5px] md:text-[16px] font-semibold text-[#1F2937]">
+                <CheckCircle size={20} className="text-[#2563EB] shrink-0" />
+                <span className="text-center bg-white/30 px-1 rounded backdrop-blur-[1px]">{item}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* Connects Hero directly to Pricing to avoid horizontal cutoff lines */}
+      <div className="bg-white h-0"></div>
+
       {/* 2. PRICING SECTION */}
-      <section id="pricing" className="w-full">
-        <div className="text-center mb-10">
-          <div className="flex justify-center items-center gap-4 text-xs font-bold text-gray-500 uppercase tracking-widest mb-6">
-             <span className="flex items-center gap-1.5"><Shield size={14} className="text-primary"/> Secure Payment</span>
-             <span className="text-gray-300">•</span>
-             <span>Trusted by 5000+ students</span>
+      <section id="pricing" className="w-full relative z-20 pt-10">
+        {/* Beautifully aligned header block */}
+        <div className="flex flex-col items-center justify-center text-center mb-12">
+          {/* Trust Badge integrated into a clean centered pill */}
+          <div className="flex flex-wrap items-center justify-center gap-3 px-5 py-2.5 bg-blue-50/80 border border-blue-100/60 rounded-full mb-6">
+             <div className="flex items-center gap-1.5 text-[12px] font-extrabold text-[#2563EB] tracking-wider uppercase">
+               <Shield size={15} /> <span>Secure Payment</span>
+             </div>
+             <span className="text-gray-300 hidden md:inline">|</span>
+             <span className="text-[12px] font-bold text-[#4B5563] tracking-wider uppercase">
+               Trusted by 5000+ students
+             </span>
           </div>
-          <h2 className="text-3xl font-bold text-text-main mb-2">Choose Your Plan</h2>
+          
+          <h2 className="text-[32px] md:text-4xl font-[800] text-[#111827] tracking-tight">
+            Choose Your Plan
+          </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-4">

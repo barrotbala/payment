@@ -47,10 +47,41 @@ const Payment = () => {
   const [formData, setFormData] = useState({
     name: '', email: '', phone: '', college: '', department: ''
   });
+  const [status, setStatus] = useState('idle');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Processing payment via secure gateway...');
+    
+    if (!formData.college || !formData.department) {
+      alert("Please select both your college and department.");
+      return;
+    }
+    
+    setStatus('loading');
+    
+    try {
+      const response = await fetch('http://localhost:5000/save-student', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          planName: plan.name,
+          amount: plan.newPrice || plan.price
+        })
+      });
+      
+      if (response.ok) {
+        setStatus('success');
+        setTimeout(() => alert('Data saved successfully to Excel! Redirecting to secure gateway simulator...'), 500);
+      } else {
+        setStatus('error');
+        alert('Error saving details to database.');
+      }
+    } catch (err) {
+      console.error("Backend connection error:", err);
+      setStatus('error');
+      alert('Could not connect to the backend server. Is it running?');
+    }
   };
 
   const collegeOptions = [
@@ -97,10 +128,23 @@ const Payment = () => {
           
           <button 
             onClick={() => navigate(-1)} 
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-text-main text-sm font-medium rounded-lg transition-colors self-start mt-2"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 shadow-sm hover:shadow text-text-main text-sm font-medium rounded-lg transition-colors self-start mt-2"
           >
             <ArrowLeft size={16} /> Back to Plans
           </button>
+          
+          {/* Admin Export Button */}
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-3">Admin Controls</p>
+            <a 
+              href="http://localhost:5000/download" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 w-full py-3 bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 text-indigo-700 text-sm font-bold rounded-lg transition-colors shadow-sm"
+            >
+               ↓ Download Student Data (.xlsx)
+            </a>
+          </div>
         </div>
 
         {/* RIGHT: Form */}
@@ -157,8 +201,12 @@ const Payment = () => {
               />
             </div>
 
-            <button type="submit" className="btn-primary mt-6">
-              Proceed to Payment
+            <button 
+              type="submit" 
+              disabled={status === 'loading'}
+              className={`w-full py-4 text-white font-bold rounded-xl shadow-lg transition-all text-lg mt-6 ${status === 'loading' ? 'bg-blue-400 cursor-not-allowed' : 'bg-primary hover:bg-primary-hover hover:-translate-y-0.5'}`}
+            >
+              {status === 'loading' ? 'Processing Securely...' : 'Proceed to Payment'}
             </button>
           </form>
         </div>
